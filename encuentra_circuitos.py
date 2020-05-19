@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat May 16 21:40:05 2020
+Created on Sat Apr  4 17:49:18 2020
 
-@author: Carlos
+@author: Elena y Daniel
 """
 import mlrose
 import numpy as np
