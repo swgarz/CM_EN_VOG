@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Apr  4 17:49:18 2020
+
+@author: Elena y Daniel
+"""
 
 import pandas as pd
 import numpy as np
