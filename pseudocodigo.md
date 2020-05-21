@@ -1,4 +1,4 @@
-# pseudocodigo costo Mínimo
+# pseudocodigo costo minimo
       
  Inicio
  Leer costo_min  
@@ -22,13 +22,33 @@
                   renglon <- i
                   columna <- minimos[i]
                   minimo <- aux
-     oferta <- costo_minimo.renglon[-1]
-     demanda <- cossto_min[]
+     oferta <- valor de oferta del valor mínimo
+     demanda <- valor de demanda del valor mínimo
+     Si demanda != 0 y oferta != 0 Entonces
+      Si oferta > demanda Entonces
+            func_obj += oferta por el costo minimo
+            costo minimo solucion <- demanda
+            columna <- 0
+            oferta <- oferta - demanda
+            se elimina la columna
+       SiNo
+            fun_obj += demanda por el costo minimo
+            costo minimo solucion <- oferta
+            renglon <- 0
+            demanda <- demanda - oferta
+            se elimina el renglon
+       Si el vector minimos [0] == 0 Entonces
+            bandera <- False
+            Romper ciclo
+       SiNo
+            Si demanda == 0 Entonces
+                  eliminar tabla columnas
+            SiNo 
+                  elimiar tabla filas
+     Escribir costo minimo solucion
+            
      
-     
-     
-     
-     Para i hasta range: 
+  
  
  
  
