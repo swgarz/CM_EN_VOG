@@ -1,8 +1,7 @@
 # pseudocodigo costo minimo
       
  Inicio
- Leer costo_min  
- 
+ Leer costo_mindatos
  Bandera <- true
  Fun_obj <- 0
  Mientras bandera sea verdadero 
@@ -46,6 +45,38 @@
             SiNo 
                   elimiar tabla filas
      Escribir costo minimo solucion
+     
+     Leer datos
+     indice en fuentes
+     n_col <- costo minimo solucion
+     n_ren <- costo minimo
+     optimiza_met <- true
+     primera_ite <- 0
+     Escribir "Solucion inicial"
+     Mientras optimiza_met
+      Si primera_ite == 0
+            matriz <- matriz costo minimo solucion
+            matriz <- matriz dato float
+            matriz [matriz == 0] <- not a number
+            matriz_no_bas <- copia matriz
+            matriz_circuito <- copia matriz
+      SiNo
+            matriz <- copia matriz_circuito
+            matriz_no_bas <- copia matriz
+            matriz_circuito <- copia matriz
+      primera_ite += 1
+      
+      ls_u <- [np.nan Para i=1 incremento 1 hasta n_ren]
+      ls_v <- [np.nan para i=1 incremento 1 hasta n_col]
+      ren <- 1
+      col <- 1
+      bandera <- 0
+      ls_u [0] <- 0
+      ls_basicas <- []
+      Para ren=1 incremento 1 hasta n_ren
+            Para col=1 incremento 1 hasta n_col
+                  SiNo matriz 
+     
               
   
  
@@ -54,11 +85,3 @@
  
  # pseudocodigo Vogel
  
- 
- 
- 
- 
-# Notas
-shape Devuelve la dimensión del array, es decir, una tupla de enteros indicando el tamaño del array en cada dimensión. Para una matriz de n filas y m columnas obtendremos (n,m).
-
-axis =1 igual a columna, axis=0 a renglon
