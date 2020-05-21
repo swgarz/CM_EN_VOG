@@ -12,7 +12,23 @@
           Romper ciclo 
  Fin Mientras
  
-     minimo <- primer renglón de los valores mínimos
+     minimo <- valor minimo del primer renglon
+     count <- 0
+     renglon <- 0
+     columnas <- minimos[0]
+     Repetir para i=1 incremento 1 hasta n
+            aux <- minimo del renglon[i]
+            Si aux < minimo   
+                  renglon <- i
+                  columna <- minimos[i]
+                  minimo <- aux
+     oferta <- costo_minimo.renglon[-1]
+     demanda <- cossto_min[]
+     
+     
+     
+     
+     Para i hasta range: 
  
  
  
