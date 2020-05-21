@@ -91,20 +91,20 @@ def izquierda(x, y, matriz):
 
 if __name__ == '__main__':
 
-    ruta = r'C:\Users\raulr\Desktop/'
-    costo_min = pd.read_csv('vogel.csv')
-    costo_min.dropna(inplace=True)
-    costo_min = costo_min.set_index('fuentes')
-    costo_min_sol = costo_min.copy()
-    for i in range(costo_min.shape[0]-1):
-        for j in range(len(costo_min.columns)-1):
-            costo_min_sol.iloc[i, j] = 0
+   
+    costo_min = pd.read_csv('vogel.csv') #importar Datos
+    costo_min.dropna(inplace=True) #elimina valores nulos
+    costo_min = costo_min.set_index('fuentes') #establece el indice de los datos
+    costo_min_sol = costo_min.copy() #crea un nuevo objeto compuesto
+    for i in range(costo_min.shape[0]-1): #devuelve la dimension de las tuplas
+        for j in range(len(costo_min.columns)-1): #devuelve la dimension de las columnas
+            costo_min_sol.iloc[i, j] = 0 # selecciona i,j
 
     bandera = True
     fun_obj = 0
     while bandera:
         minimos = costo_min.iloc[:-1, :-1].idxmin(axis=1) # Encuentra el indice del costo minimo por columna
-        if minimos.shape[0] == 0:
+        if minimos.shape[0] == 0: #Si no hay minimos proceso terminado
             bandera = False
             print('Proceso terminado')
             break
@@ -113,16 +113,17 @@ if __name__ == '__main__':
         minimo = costo_min.loc[costo_min.index[0], minimos[0]] # Obtiene el minimo del primer renglon
         count = 0
         renglon = 0
-        columna = minimos[0] # Obtiene la columan del del minimo del primer renglon
+        columna = minimos[0] # Obtiene la columna del minimo del primer renglon
         for i in  range(1, costo_min.shape[0]-1):# Recorrera todas las columnas con costos a partir del renglon 1
             #print(i)
             aux = costo_min.loc[costo_min.index[i], minimos[i]] # Obtiene el minimo del renglon
-            if aux < minimo: #Compara el minimo de todos los renglonnes contra el minimo del renglon 0
-                #Se guarda el renlon y columna de valor minimo
+            if aux < minimo: #Compara el minimo de todos los renglones contra el minimo del renglon 0
+                #Se guarda el renglon y columna del valor minimo
                 renglon = i
                 columna = minimos[i]
                 minimo = aux
-
+        # hasta aqui se ha encontrado el mínimo de la matriz
+        
         #Obtiene la demanda y oferta del costo minimo
         oferta = costo_min.iloc[renglon, -1]
         demanda = costo_min.loc[costo_min.index[-1], columna]
