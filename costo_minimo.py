@@ -133,15 +133,15 @@ if __name__ == '__main__':
                 #print('Ofer > demanda')
                 #print(str(costo_min.loc[costo_min.index[renglon], columna]),' * ', str(demanda))
                 fun_obj += (costo_min.loc[costo_min.index[renglon], columna] * demanda) # multiplica la oferta por el costo
-                costo_min_sol.loc[costo_min.index[renglon], columna] = demanda
-                costo_min.loc[costo_min.index[-1], columna] = 0
+                costo_min_sol.loc[costo_min.index[renglon], columna] = demanda #se cumple la demanda del costo minimo
+                costo_min.loc[costo_min.index[-1], columna] = 0 # deja en cero los demas espacios de la columna
                 costo_min.iloc[renglon, -1] = costo_min.iloc[renglon, -1] - demanda # Se le quita la oferta a la demanda
                 costo_min.drop(columna, inplace=True, axis=1) #Se elimina la columna
             else:
                 #print('Ofer < demanda')
-                fun_obj += (costo_min.loc[costo_min.index[renglon], columna] * oferta)
-                costo_min_sol.loc[costo_min.index[renglon], columna] = oferta
-                costo_min.iloc[renglon, -1] = 0
+                fun_obj += (costo_min.loc[costo_min.index[renglon], columna] * oferta) # multiplica la demanda por el costo
+                costo_min_sol.loc[costo_min.index[renglon], columna] = oferta # se da la oferta al costo
+                costo_min.iloc[renglon, -1] = 0 # deja los demas espacios del renglon en blanco
                 costo_min.loc[costo_min.index[-1], columna] = costo_min.loc[costo_min.index[-1], columna] - oferta # Se le quita la demanda a la oferta
                 costo_min.drop(costo_min.index[renglon], inplace=True, axis=0) #Se elimina el renglon
             if minimos.shape[0] == 0:
