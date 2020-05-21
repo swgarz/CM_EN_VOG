@@ -181,6 +181,7 @@ if __name__ == '__main__':
             matriz_circuito = matriz.copy()
         primera_ite += 1
         
+        # metodo de multiplicadores (precios sombra)
         ls_u = [np.nan for i in range(n_ren)]
         ls_v = [np.nan for i in range(n_col)]
         
@@ -203,8 +204,8 @@ if __name__ == '__main__':
         for ren in range(len(ls_u)):
             if math.isnan(ls_u[ren]):
                 for col in range(n_col):
-                    if not math.isnan(matriz[ren][col]):
-                        ls_v[col] = matriz_costo[ren][col] - ls_u[ren]   
+                    if not math.isnan(matriz[ren][col]): # para las variables basicas
+                        ls_v[col] = matriz_costo[ren][col] - ls_u[ren] # operacion de los multiplicadores  
     
         #print('Valida v')
         for col in range(len(ls_v)):
