@@ -57,7 +57,7 @@
  
  
  
- 
-### shape Devuelve la dimensión del array, es decir, una tupla de enteros indicando el tamaño del array en cada dimensión. Para una matriz de n filas y m columnas obtendremos (n,m).
+# Notas
+shape Devuelve la dimensión del array, es decir, una tupla de enteros indicando el tamaño del array en cada dimensión. Para una matriz de n filas y m columnas obtendremos (n,m).
 
-## axis =1 igual a columna, axis=0 a renglon
+axis =1 igual a columna, axis=0 a renglon
