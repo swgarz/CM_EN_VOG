@@ -46,12 +46,13 @@
             SiNo 
                   elimiar tabla filas
      Escribir costo minimo solucion
-            
-     
+              
   
  
  
+ # pseudocodigo Esquina Noroeste
  
+ # pseudocodigo Vogel
  
  
  
