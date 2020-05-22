@@ -81,49 +81,49 @@
                               ls_v <- matriz_costo - ls_u
                         Si valor nulo ls_u y no valor nulo ls_v
                               ls_u <- matriz_costo - ls_v
-Para ren=1 incremento 1 hasta tamaño de ls_u
-      Si valor nulo en ls_u
+      Para ren=1 incremento 1 hasta tamaño de ls_u
+            Si valor nulo en ls_u
             Para col=1 incremento 1 hasta n_col
                   SiNo malor nulo en matriz 
                         ls_v <- matriz_costo - ls_u
- Para col=1 incremento 1 hasta tamaño de ls_v
-      Si valor nulo en ls_v
+      Para col=1 incremento 1 hasta tamaño de ls_v
+            Si valor nulo en ls_v
             Para ren=1 incremento 1 hasta n_ren
                   SiNo valor nulo en matriz 
                         ls_v <- matriz_costo - ls_u 
-  r_entrada <- 0
-  c_entrada <- 0
-  entrada <- -1000
-  demanda <- []
-  oferta <- []
-  Para ren=1 incremento 1 hasta n_ren
-      Para col=1 incremento 1 hasta n_col
-            Si valor nulo en matriz_no_bas Entonces
-                  matriz_no_bas <- ls_u + ls_v - matriz_costo
-                  Si matriz_no_bas > entrada Entonces
-                        entrada <- matriz_no_bas
-                        r_entrada <- ren
-                        c_entrada <- col
-                  SiNo 
-                     matriz_no_bas <- 0
-   Si entrada < 0 Entonces
-      optimiza_met <- false
-      Romper ciclo
+      r_entrada <- 0
+      c_entrada <- 0
+      entrada <- -1000
+      demanda <- []
+      oferta <- []
+      Para ren=1 incremento 1 hasta n_ren
+            Para col=1 incremento 1 hasta n_col
+                  Si valor nulo en matriz_no_bas Entonces
+                        matriz_no_bas <- ls_u + ls_v - matriz_costo
+                        Si matriz_no_bas > entrada Entonces
+                              entrada <- matriz_no_bas
+                              r_entrada <- ren
+                              c_entrada <- col
+                        SiNo 
+                              matriz_no_bas <- 0
+      Si entrada < 0 Entonces
+            optimiza_met <- false
+            Romper ciclo
                         
-   circuito <- false
-   ban_cir <- 0
-   ls_circuito <- []
-   r_e <- r_entrada
-   c_e <- c_entrada
-   ls_aux <- ls_basicas
-   valor append a ls_basicas
-   ls_basicas_clone <- copia ls_basicas
-   n<-4
+      circuito <- false
+      ban_cir <- 0
+      ls_circuito <- []
+      r_e <- r_entrada
+      c_e <- c_entrada
+      ls_aux <- ls_basicas
+      valor append a ls_basicas
+      ls_basicas_clone <- copia ls_basicas
+      n<-4
    ###### concepto prueba
-   matriz_circuito2 <- copia matriz
-   matriz_circuito2 [r_entrada][c_entrada] <- 1
-   ban_cir_t <- false
-   Para c=1 n=4 incremento 4 hasta el tamaño de ls_basicas + 1
+      matriz_circuito2 <- copia matriz
+      matriz_circuito2 [r_entrada][c_entrada] <- 1
+      ban_cir_t <- false
+      Para c=1 n=4 incremento 4 hasta el tamaño de ls_basicas + 1
       
    
               
