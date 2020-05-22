@@ -124,7 +124,7 @@
       matriz_circuito2 [r_entrada][c_entrada] <- 1
       ban_cir_t <- false
       Para c=1 n=4 incremento 4 hasta el tamaño de ls_basicas + 1
-      
+   ###### pendiente
    
               
   
