@@ -131,6 +131,428 @@
  
  
  # pseudocodigo Esquina Noroeste
+      import pandas as pd
+      import numpy as np
+      import math
+      import encuentra_circuitos as f_g
+      import itertools
+      import mlrose
+      import numpy as np
+      import itertools
+
+
+      FUNCTION aptitud2(poA, poB):
+    SI poA[0] = poB[0] OR poA[1] = poB[1] ENTONCES
+        RETURN 2
+    SI NO ENTONCES ENTONCES
+        RETURN 1
+    FINSI
+      ENDFUNCTION
+
+
+      FUNCTION encuentra_circuito2(orden, ls_basicas):
+	    
+	PARA i HASTA len(orden) HACER
+		orden_aux <- i
+	FINPARA
+                   
+    dist_list <- []
+    PARA i in orden_aux:
+        PARA j in orden_aux:
+            SI i != j ENTONCES
+                costo <- aptitud2(ls_basicas[orden[i]], ls_basicas[orden[j]])
+                dist_list.append((i, j, costo))
+            FINSI
+		FINPARA
+	FINPARA
+
+    fitness_dists <- mlrose.TravellingSales(distances <- dist_list)
+    problem_fit <- mlrose.TSPOpt(length <- len(orden), fitness_fn <- fitness_dists, maximize=True)
+    best_state, best_fitness <- mlrose.genetic_alg(problem_fit, random_state <- 2)
+	
+    resul <- []
+    PARA i <- 0 HASTA len(best_state) HACER
+        resul.append(orden[i])
+    FINPARA
+
+    ini <- resul.index(len(ls_basicas)-1)
+    resul <- resul[ini:] + resul[0:ini]
+    result <- resul + [resul[0]]
+    sum_total <- 0
+
+    PARA i <- 0 HASTA len(result)-1 HACER
+        costo <- aptitud2(ls_basicas[result[i]], ls_basicas[result[i+1]])
+        SI costo = 1 ENTONCES
+            best_fitness = best_fitness + .5
+            RETURN resul, best_fitness/2            
+        FINSI
+    FINPARA
+    RETURN resul, best_fitness/2
+      ENDFUNCTION
+
+
+      FUNCTION isextremo(matriz, ren, col):
+    up, x_up, y_up <- arriba(ren, col, matriz)
+    down, x_down, y_down <- abajo(ren, col, matriz)
+    right, x_right, y_right <- derecha(ren, col, matriz)
+    left, x_left, y_left <- izquierda(ren, col, matriz)
+    SI down AND right ENTONCES
+        RETURN True
+    SINO SI left AND down ENTONCES
+        RETURN True
+    SINO SI up AND right ENTONCES
+        RETURN True
+    SINO SI up AND left ENTONCES
+        RETURN True
+    SI NO ENTONCES
+        RETURN False
+    FINSI
+      ENDFUNCTION
+
+      FUNCTION arriba(x, y, matriz):
+    bandera <- False
+    ren <- x - 1
+    MIENTRAS ren >= 0 HACER
+        SI not math.isnan(matriz[ren][y]):
+            bandera <- True
+            RETURN True, ren, y
+        FINSI
+        ren <- ren - 1
+    ENDWHILE
+    RETURN bandera , -1, -1
+      ENDFUNCTION
+
+
+      FUNCTION abajo(x, y, matriz):
+    bandera <- False
+    n_ren <- len(matriz[0])
+    PARA ren in range(x+1, n_ren):
+        SI not math.isnan(matriz[ren][y]):
+            bandera <- True
+            RETURN bandera, ren, y
+        FINSI
+    FINPARA
+    RETURN bandera , -1, -1
+      ENDFUNCTION
+
+      FUNCTION derecha(x, y, matriz):
+    bandera <- False
+    n_col <- len(matriz[0][:])
+    PARA col in range(y+1, n_col):
+        SI not math.isnan(matriz[x][col]):
+            bandera <- True
+            RETURN True, x, col
+        FINSI
+    FINPARA
+    RETURN bandera , -1, -1
+      ENDFUNCTION
+
+
+      FUNCTION izquierda(x, y, matriz):
+    bandera <- False
+    col <- y - 1
+    MIENTRAS col>=0 HACER
+        SI not math.isnan(matriz[x][col]):
+            bandera <- True
+            RETURN True, x, col
+        FINSI
+        col <- col - 1
+    ENDWHILE
+    RETURN bandera , -1, -1
+       ENDFUNCTION
+
+
+      SI __name__ = '__main__':
+
+    esquina_noro <- LEER(Archivo_Vogel)       
+    esquina_noro_sol <- LEER(Archivo_Vogel)
+	
+	
+    PARA i <-0 HASTA n_renglones - 1 HACER
+        PARA j HASTA n_columnas - 1 HACER
+				esquina_noro_sol[i][j] <- 0                
+		FINPARA
+    FINPARA
+	
+    x <- 0
+    y <- 0
+    fun_obj <- 0
+    bandera <- True
+    ofer <- -1
+    dem <- -1
+
+    MIENTRAS True HACER        
+        SI (ofer == 0 AND dem == 0) OR (num_renglones < 1):
+            ESCRIBIR 'Proceso terminado'
+            bandera <- False
+            break        
+        FINSI
+		
+        ind_oferta <- num_columnas -1
+        ind_demanda <- num_renglones - 1           
+        ofer <- esquina_noro[0, ind_oferta]
+        dem <- esquina_noro[ind_demanda, 0]
+
+        SI dem != 0 AND ofer != 0 ENTONCES                        
+            SI dem > ofer ENTONCES
+                esquina_noro_sol[x, y] <- ofer 
+                fun_obj <- fun_obj + (esquina_noro[0, 0] * ofer) 
+                esquina_noro[0, ind_oferta] <- esquina_noro[0, ind_oferta] - ofer
+                esquina_noro[ind_demanda, 0] <- esquina_noro[ind_demanda, 0] - ofer
+				
+                esquina_noro.drop(renglon_0)
+                x <- x + 1
+            SI NO ENTONCES
+                esquina_noro_sol[x, y] <- dem
+                fun_obj <- fun_obj + esquina_noro[0, 0] * dem)
+                esquina_noro[0, ind_oferta] <- esquina_noro[0, ind_oferta] - dem
+                esquina_noro[ind_demanda, 0] <- esquina_noro[ind_demanda, 0] - dem
+                esquina_noro.drop(columna_0)
+                y <- y + 1
+            FINSI
+        SI NO ENTONCES           
+            SI dem > ofer ENTONCES
+                esquina_noro.drop(renglon_0)
+                x <- x + 1
+            SI NO ENTONCES
+                esquina_noro.drop(columna_0)
+                y <- y + 1
+            FINSI        
+        FINSI
+        SI (ofer==0 AND dem == 0) OR (num_renglones<1):
+            ESCRIBIR 'Proceso terminado'
+            bandera <- False
+            break
+        FINSI
+    ENDWHILE
+	
+    ESCRIBIR '******************************' 
+    ESCRIBIR 'Funcion Objetivo: ', fun_obj
+    ESCRIBIR esquina_noro_sol
+
+    esquina_noro <- LEER(Archivo_Vogel)       
+    esquina_noro_sol <- LEER(Archivo_Vogel)
+		
+    n_col <- esquina_noro_sol.shape[1] - 1
+    n_ren <- esquina_noro_sol.shape[0] - 1
+    optimiza_met <- True
+    primera_ite <- 0
+	
+    ESCRIBIR '\nProceso optimizacion solucion inicial\n'
+	
+    MIENTRAS optimiza_met HACER
+        SI primera_ite = 0 ENTONCES
+            matriz <- esquina_noro_sol[:n_ren-1, :n_col-1]
+            matriz <- matriz.astype('float')
+            matriz[matriz = 0] <- 'nan' 
+            matriz_no_bas <- matriz
+            matriz_circuito <- matriz
+            matriz_costo <- esquina_noro[:-1,:-1].to_numpy()
+        SI NO ENTONCES
+            matriz <- matriz_circuito
+            matriz_no_bas <- matriz
+            matriz_circuito <- matriz
+        FINSI
+
+        primera_ite <- primera_ite + 1
+		
+		PARA i HASTA n_ren HACER
+			ls_u <- i
+		FINPARA
+		
+		PARA i HASTA n_col HACER
+			ls_v <- i
+		FINPARA		
+		
+
+        ren <- 1
+        col <- 1
+        bandera <- 0
+        ls_u[0] <- 0
+        ls_basicas <- []
+		
+        PARA ren <- 0 HASTA n_ren HACER
+            PARA col <- 0 HASTA n_col HACER
+                SI not math.isnan(matriz[ren][col]) ENTONCES
+                    ls_basicas.append((ren, col))
+                    SI not math.isnan(ls_u[ren]) AND math.isnan(ls_v[col]) ENTONCES
+                        ls_v[col] <- matriz_costo[ren][col] - ls_u[ren]                    
+                    SINO SI math.isnan(ls_u[ren]) AND not math.isnan(ls_v[col]) ENTONCES
+                        ls_u[ren] <- matriz_costo[ren][col] - ls_v[col]
+					FINSI
+				FINSI
+            FINPARA
+        FINPARA
+
+        PARA ren <- 0 HASTA len(ls_u) HACER
+            SI math.isnan(ls_u[ren]) ENTONCES
+                PARA col <- 0 HASTA n_col HACER
+                    SI not math.isnan(matriz[ren][col]) ENTONCES
+                        ls_v[col] <- matriz_costo[ren][col] - ls_u[ren]   
+					FINSI
+				FINPARA
+			FINSI               
+        FINPARA
+		
+        PARA col <- 0 HASTA len(ls_v) HACER
+            SI math.isnan(ls_v[col]) ENTONCES
+                PARA ren <- 0 HASTA n_ren HACER
+                    SI not math.isnan(matriz[ren][col]) ENTONCES
+                        ls_v[col] <- matriz_costo[ren][col] - ls_u[ren]      
+					FINSI                    
+                FINPARA
+			FINSI
+
+        r_entrada <- 0
+        c_entrada <- 0
+        entrada <- -1000
+        demanda <- [] 
+        oferta <- [] 
+        PARA ren <- 0 HASTA n_ren HACER
+            PARA col <- 0 HASTA n_col HACER
+                SI math.isnan(matriz_no_bas[ren][col]) ENTONCES
+                   matriz_no_bas[ren][col] <- ls_u[ren] + ls_v[col] - matriz_costo[ren][col]
+                   SI matriz_no_bas[ren][col] > entrada ENTONCES
+                       entrada <- matriz_no_bas[ren][col]
+                       r_entrada <- ren
+                       c_entrada <- col   
+                   FINSI
+                SI NO ENTONCES
+                    matriz_no_bas[ren][col] <- 0
+                FINSI
+			FINPARA
+		FINPARA
+		
+        SI entrada < 0 ENTONCES
+            optimiza_met <- False
+            break
+        FINSI
+		
+        circuito <- False
+        ban_cir <- 0
+        ls_circuito <- []
+        r_e <- r_entrada
+        c_e <- c_entrada
+        
+        ls_aux <- ls_basicas
+        ls_basicas.append((r_entrada, c_entrada))
+        ls_basicas_clone <- ls_basicas
+        
+        matriz_circuito2 <- matriz
+        matriz_circuito2[r_entrada][c_entrada] <- 1
+        ban_cir_t <- False
+        PARA c <- 0, n <- 4 HASTA enumerate(len(ls_basicas)+1) HACER
+            comb <- itertools.combinations([c PARA c <- 0, i <- 0 HASTA enumerate(ls_basicas) FINPARA], n )
+                                             
+            PARA com <- 0 HASTA comb HACER
+                
+				SI len(list(com)) % 2 = 0 
+					criterio <- len(list(com))
+				SI NO ENTONCES 
+					criterio <- len(list(com)) - 1 
+				FINSI
+                                          
+                SI len(ls_basicas)-1 in list(com) ENTONCES
+                    ord_circuito, costo_cir <- encuentra_circuito2(list(com), ls_basicas)
+                    num_extremos <- 0
+                    PARA i HASTA ord_circuito HACER
+                        SI isextremo(matriz_circuito2, ls_basicas[i][0], ls_basicas[i][1]) ENTONCES
+                           num_extremos = num_extremos + 1 
+                        FINSI
+                    FINPARA
+                    SI costo_cir = criterio AND num_extremos>=4 ENTONCES
+                        camino <- list(com)
+                        ban_cir_t <- True
+                        break
+					FINSI
+				FINSI
+            FINPARA
+            SI ban_cir_t ENTONCES
+                break
+            FINSI
+        FINPARA
+		
+        ini <- ord_circuito.index(len(ls_basicas)-1)
+        camino <- ord_circuito[ini:] + ord_circuito[0:ini]
+        l_theta <- []
+        l_theta_p <- []
+        
+        signos <- 1
+        ban_alt <- False
+        PARA c <- 0, i <- 0 HASTA enumerate(camino) HACER
+            ren <- ls_basicas[i][0]
+            col <- ls_basicas[i][1]
+            SI c = 0 ENTONCES
+                matriz_circuito[ren][col] <- 100000
+            SI NO ENTONCES
+                SI signos % 2 != 0 ENTONCES
+                    SI isextremo(matriz_circuito2, ren, col):
+                        SI matriz_circuito[ren][col] = 0 ENTONCES
+                            ban_alt <- True
+                        FINSI
+                        l_theta.append(matriz_circuito[ren][col])
+                        signos = signos + 1
+                    FINSI
+                SI NO ENTONCES
+                    SI isextremo(matriz_circuito2, ren, col):
+                        l_theta_p.append(matriz_circuito[ren][col])
+                        signos = signos + 1
+					FINSI
+				FINSI
+            FINSI
+        FINPARA
+        theta <- min(l_theta)
+
+        matriz_circuito2 <- matriz
+        matriz_circuito2[r_entrada][c_entrada] <- theta
+        signos <- 1
+        PARA c <- 0, i <- 0 HASTA enumerate(camino) HACER
+            ren <- ls_basicas[i][0]
+            col <- ls_basicas[i][1]
+            SI c = 0 ENTONCES
+                matriz_circuito[ren][col] <- theta
+            SI NO ENTONCES
+                SI signos % 2 != 0 ENTONCES
+                    SI isextremo(matriz_circuito2, ren, col) ENTONCES
+                        matriz_circuito[ren][col] = matriz_circuito[ren][col] -  theta                                                 
+                        signos += 1
+                    FINSI
+                SI NO ENTONCES
+                    SI isextremo(matriz_circuito2, ren, col) ENTONCES                                                
+                        matriz_circuito[ren][col] = matriz_circuito[ren][col] + theta
+                        signos += 1
+					FINSI
+				FINSI
+			FINSI
+        FINPARA
+        ban_for <- False
+            
+        PARA ren <- 0 HASTA n_ren HACER
+            PARA col <- 0 n_col HACER
+                SI matriz_circuito[ren][col] = 0 ENTONCES
+                    matriz_circuito[ren][col] <- 'nan'
+                    ban_for <- True                        
+                    break
+                FINSI
+            FINPARA
+            SI ban_for ENTONCES
+                   FINPARA
+                break
+            FINSI
+		FINPARA
+    ENDWHILE
+        
+    fun_obj2 <- 0
+    PARA ren <- 0 HASTA n_ren HACER
+        PARA col <- 0 HASTA n_col HACER
+            SI not math.isnan(matriz[ren][col]) ENTONCES
+                fun_obj2 = fun_obj2 + (matriz[ren][col] * matriz_costo[ren][col])
+            FINSI
+		FINPARA
+	FINPARA
+    ESCRIBIR 'Funcion Objetivo:: ', fun_obj2
+    ESCRIBIR matriz
+
  
  # pseudocodigo Vogel
  
