@@ -1,50 +1,60 @@
 # pseudocodigo costo minimo
       
- Inicio
- Leer costo_mindatos
- Bandera <- true
- Fun_obj <- 0
- Mientras bandera sea verdadero 
-     Mínimos <- vector de id los valores mínimos
-     If mínimos es de tamaño 0 entonces
-          Bandera <- false
-          Romper ciclo 
- Fin Mientras
  
-     minimo <- valor minimo del primer renglon
-     count <- 0
-     renglon <- 0
-     columnas <- minimos[0]
-     Repetir para i=1 incremento 1 hasta n
-            aux <- minimo del renglon[i]
-            Si aux < minimo   
+	SI __name__ = '__main__':
+	costo_min <- LEER(voguel.csv)
+	costo_min.dropna(inplace=True) 
+	costo_min <- LEER(Archivo_Voguel)
+	costo_min_sol <- costo_min 
+	PARA i <- 0 HASTA n_renglones - 1 HACER
+		PARA j HASTA N_columnas -1 HACER
+			costo_min_sol[i][j] <- 0
+
+	 bandera <- True
+	 fun_obj <- 0
+	 MIENTRAS True HACER 
+	     minimos <- costo_min.iloc[:-1, :-1].idxmin(axis=1)
+	     SI minimos.shape[0] = 0
+		  bandera <- False
+		  ESCRIBIR 'Proceso terminado' 
+		  break
+
+     	     minimo <- costo_min[costo_min.index[0], minimos[0]]
+     	     count <- 0
+             renglon <- 0
+             columna <- minimos[0]
+             PARA i <- 0 HASTA n_renglones -1 HACER
+            	aux <- costo_min[costo_min.index[i], minimos[i]]
+            	SI aux < minimo ENTONCES  
                   renglon <- i
                   columna <- minimos[i]
                   minimo <- aux
-     oferta <- valor de oferta del valor mínimo
-     demanda <- valor de demanda del valor mínimo
-     Si demanda != 0 y oferta != 0 Entonces
-      Si oferta > demanda Entonces
-            func_obj += oferta por el costo minimo
-            costo minimo solucion <- demanda
-            columna <- 0
-            oferta <- oferta - demanda
-            se elimina la columna
-       SiNo
-            fun_obj += demanda por el costo minimo
-            costo minimo solucion <- oferta
-            renglon <- 0
-            demanda <- demanda - oferta
-            se elimina el renglon
-       Si el vector minimos [0] == 0 Entonces
-            bandera <- False
-            Romper ciclo
-       SiNo
-            Si demanda == 0 Entonces
-                  eliminar tabla columnas
-            SiNo 
-                  elimiar tabla filas
-     Escribir costo minimo solucion
+     	     oferta <- costo_min[renglon, -1]
+     	     demanda <- costo_min[costo_min.index[-1], columna]
+     	     SI demanda != 0 and oferta != 0 ENTONCES
+     		SI oferta > demanda ENTONCES
+		    func_obj <- func_obj + (costo_min[costo_min[renglon], columna] * demanda)
+		    costo_min_sol[costo_min.index[renglon], columna] <- demanda 
+		    costo_min[costo_min.index[-1], columna] <- 0
+		    costo_min[renglon, -1] <- costo_min[renglon, -1] - demanda 
+		    
+		    costo_min.drop(columna_0)
+<!-- hasta aqui llevamos -->
+	       SiNo
+		    fun_obj += demanda por el costo minimo
+		    costo minimo solucion <- oferta
+		    renglon <- 0
+		    demanda <- demanda - oferta
+		    se elimina el renglon
+	       Si el vector minimos [0] == 0 Entonces
+		    bandera <- False
+		    Romper ciclo
+	       SiNo
+		    Si demanda == 0 Entonces
+			  eliminar tabla columnas
+		    SiNo 
+			  elimiar tabla filas
+	     Escribir costo minimo solucion
      
      Leer datos
      indice en fuentes
