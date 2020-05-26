@@ -853,3 +853,120 @@
 							vogel.drop(indice_pen_col_sol)
 							
 
+
+<!-- concepto prueba -->
+
+	matriz_circuito2 <- matriz
+	    matriz_circuito2[r_entrada][c_entrada] <- 1
+	    ban_cir_t <- False
+	    PARA c <- 0, n <- 4 HASTA enumerate(len(ls_basicas)+1) HACER
+		comb <- itertools.combinations([c PARA c <- 0, i <- 0 HASTA enumerate(ls_basicas) FINPARA], n )
+                                         
+        PARA com <- 0 HASTA comb HACER
+            
+			SI len(list(com)) % 2 = 0 
+				criterio <- len(list(com))
+			SI NO ENTONCES 
+				criterio <- len(list(com)) - 1 
+			FINSI
+                                      
+            SI len(ls_basicas)-1 in list(com) ENTONCES
+                ord_circuito, costo_cir <- encuentra_circuito2(list(com), ls_basicas)
+                num_extremos <- 0
+                PARA i HASTA ord_circuito HACER
+                    SI isextremo(matriz_circuito2, ls_basicas[i][0], ls_basicas[i][1]) ENTONCES
+                       num_extremos = num_extremos + 1 
+                    FINSI
+                FINPARA
+                SI costo_cir = criterio AND num_extremos>=4 ENTONCES
+                    camino <- list(com)
+                    ban_cir_t <- True
+                    break
+				FINSI
+			FINSI
+        FINPARA
+        SI ban_cir_t ENTONCES
+            break
+        FINSI
+    FINPARA
+	
+    ini <- ord_circuito.index(len(ls_basicas)-1)
+    camino <- ord_circuito[ini:] + ord_circuito[0:ini]
+    l_theta <- []
+    l_theta_p <- []
+    
+    signos <- 1
+    ban_alt <- False
+    PARA c <- 0, i <- 0 HASTA enumerate(camino) HACER
+        ren <- ls_basicas[i][0]
+        col <- ls_basicas[i][1]
+        SI c = 0 ENTONCES
+            matriz_circuito[ren][col] <- 100000
+        SI NO ENTONCES
+            SI signos % 2 != 0 ENTONCES
+                SI isextremo(matriz_circuito2, ren, col):
+                    SI matriz_circuito[ren][col] = 0 ENTONCES
+                        ban_alt <- True
+                    FINSI
+                    l_theta.append(matriz_circuito[ren][col])
+                    signos = signos + 1
+                FINSI
+            SI NO ENTONCES
+                SI isextremo(matriz_circuito2, ren, col):
+                    l_theta_p.append(matriz_circuito[ren][col])
+                    signos = signos + 1
+				FINSI
+			FINSI
+        FINSI
+    FINPARA
+    theta <- min(l_theta)
+
+    matriz_circuito2 <- matriz
+    matriz_circuito2[r_entrada][c_entrada] <- theta
+    signos <- 1
+    PARA c <- 0, i <- 0 HASTA enumerate(camino) HACER
+        ren <- ls_basicas[i][0]
+        col <- ls_basicas[i][1]
+        SI c = 0 ENTONCES
+            matriz_circuito[ren][col] <- theta
+        SI NO ENTONCES
+            SI signos % 2 != 0 ENTONCES
+                SI isextremo(matriz_circuito2, ren, col) ENTONCES
+                    matriz_circuito[ren][col] = matriz_circuito[ren][col] -  theta                                                 
+                    signos += 1
+                FINSI
+            SI NO ENTONCES
+                SI isextremo(matriz_circuito2, ren, col) ENTONCES                                                
+                    matriz_circuito[ren][col] = matriz_circuito[ren][col] + theta
+                    signos += 1
+				FINSI
+			FINSI
+		FINSI
+    FINPARA
+    ban_for <- False
+        
+    PARA ren <- 0 HASTA n_ren HACER
+        PARA col <- 0 n_col HACER
+            SI matriz_circuito[ren][col] = 0 ENTONCES
+                matriz_circuito[ren][col] <- 'nan'
+                ban_for <- True                        
+                break
+            FINSI
+        FINPARA
+        SI ban_for ENTONCES
+               FINPARA
+            break
+        FINSI
+	FINPARA
+	ENDWHILE
+
+	fun_obj2 <- 0
+	PARA ren <- 0 HASTA n_ren HACER
+	    PARA col <- 0 HASTA n_col HACER
+		SI not math.isnan(matriz[ren][col]) ENTONCES
+		    fun_obj2 = fun_obj2 + (matriz[ren][col] * matriz_costo[ren][col])
+		FINSI
+		FINPARA
+	FINPARA
+	ESCRIBIR 'Funcion Objetivo:: ', fun_obj2
+	ESCRIBIR matriz
