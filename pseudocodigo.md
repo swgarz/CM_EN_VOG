@@ -1,4 +1,4 @@
-# pseudocodigo costo minimo
+# pseudocodigo Costo Mínimo
       
  
 	SI __name__ = '__main__':
@@ -285,8 +285,6 @@
       import encuentra_circuitos as f_g
       import itertools
       import mlrose
-      import numpy as np
-      import itertools
 
 
       FUNCTION aptitud2(poA, poB):
@@ -704,3 +702,154 @@
  
  # pseudocodigo Vogel
  
+      import pandas as pd
+      import numpy as np
+      import math
+      import encuentra_circuitos as f_g
+      import itertools
+      import sys
+      
+      
+
+      FUNCTION isextremo(matriz, ren, col):
+    	up, x_up, y_up <- arriba(ren, col, matriz)
+    	down, x_down, y_down <- abajo(ren, col, matriz)
+    	right, x_right, y_right <- derecha(ren, col, matriz)
+    	left, x_left, y_left <- izquierda(ren, col, matriz)
+    
+    	SI down AND right ENTONCES
+        	RETURN True
+    	SINO SI left AND down ENTONCES
+        	RETURN True
+    	SINO SI up AND right ENTONCES
+        	RETURN True
+    	SINO SI up AND left ENTONCES
+        	RETURN True
+    	SI NO ENTONCES
+        	RETURN False
+    	FINSI
+      ENDFUNCTION
+
+      FUNCTION arriba(x, y, matriz):
+    	bandera <- False
+    	ren <- x - 1
+    	MIENTRAS ren >= 0 HACER
+        	SI not math.isnan(matriz[ren][y]):
+            		bandera <- True
+            		RETURN True, ren, y
+        	FINSI
+        ren <- ren - 1
+	ENDWHILE
+	RETURN bandera , -1, -1
+       ENDFUNCTION
+       
+       FUNCTION abajo(x, y, matriz):
+    	bandera <- False
+    	n_ren <- len(matriz[0])
+    	PARA ren in range(x+1, n_ren):
+        	SI not math.isnan(matriz[ren][y]):
+            		bandera <- True
+            		RETURN bandera, ren, y
+        	FINSI
+    	FINPARA
+    	RETURN bandera , -1, -1
+       ENDFUNCTION
+
+       FUNCTION derecha(x, y, matriz):
+    	bandera <- False
+    	n_col <- len(matriz[0][:])
+    	PARA col in range(y+1, n_col):
+        	SI not math.isnan(matriz[x][col]):
+            		bandera <- True
+            		RETURN True, x, col
+        	FINSI
+    	FINPARA
+    	RETURN bandera , -1, -1
+       ENDFUNCTION
+       
+       FUNCTION izquierda(x, y, matriz):
+    	bandera <- False
+    	col <- y - 1
+    	MIENTRAS col>=0 HACER
+       		SI not math.isnan(matriz[x][col]):
+            		bandera <- True
+            		RETURN True, x, col
+        	FINSI
+        	col <- col - 1
+    	ENDWHILE
+    	RETURN bandera , -1, -1
+       ENDFUNCTION
+       
+       SI __name__ = '__main__'
+       		ruta <- ''
+		vogel <- LEER(vogel.csv)
+		vogel <- LEER(vogel.csv)
+		
+		ls_col <- []
+		PARA col <- 0 list(vogel.columns)[:-1] HACER
+			val_x_ren <- vogel[col][:-1].sort_values(ascending <- True)
+			valex_ren <- list(val_x_ren[0:2])
+			ls_col.append(abs(val_x_ren[0] - val__ren[1]))
+		ls_col.append(0)
+		row_df <- pd.DataFrame([ls_col], columns <- vogel.columns)
+		vogel <- pd.concat([vogel, row_df]. ignore_index <- True)
+		
+		ls_ren <- []
+		inidice_fila <- 0
+		PARA indice_fila <- 0 HASTA vogel.shape[0]-2 HACER
+			val_x_ren <- vogel[indice_fila][:-1].sort_values(ascending <- True)
+			val_x_ren <- list(val_x_ren[0:2])
+			ls_re.append(abs(val_ren[0] - val_x_ren[1]))
+		ls_ren.append(0)
+		ls_ren.append(0)
+		vogel['penalizacion'] <- ls_ren
+		vogel_sol <- vogel
+		PARA i <- 0 HASTA vogel.shape[0]-2 HACER
+			PARA j <- 0 HASTA (len(vogel.columns)-2) HACER
+				vogel_sol[i,j] <- 0
+		bandera <- True
+		func_obj <- 0
+		MIENTRAS bandera HACER
+			SI len(vogel.columns) 0 2 or vogel.shape[0] = 2
+				ESCRIBIR 'Se acabaron las columnas'
+				bandera <- False
+				break
+			indice_pen_col <- vogel[:-2, -1].idxmax()
+			max_pen_col<- vogel[:-2, -1].max()
+			
+			indice_pen_re <- vogel[-1, :-2].idmax()
+			SI max_pen_col = 0 and max_pen_ren = 0
+				ESCRIBIR 'Se termino el proceso'
+				PARA i <-0 HASTA list(vogel.columns)[:-2]
+					vogel_sol[i][list(vogel.index)[0]] <- vogel[i][-2:-1].values[0]
+				bandera <- False
+				FINPARA
+			SI NO ENTONCES
+				SI max_pen_col > max_pen_ren ENTONCES
+					ESCRIBIR 'Buscara un renglon', indice_pen_col
+					indice_pen_col_sol <- indice_pen_col
+					indice_pen_col <- list(vogel.index).index(indice_pen_col)
+					indice_val_min <- vogel[indide_pen_col, :-2.idxmin()
+					oferta <- vogel[indice_pen_col, -2]
+					demanda <- vogel[indice_val_min][-2:-1].values[0]
+					SI demanda != 0 anda oferta != 0 ENTONCES
+						SI oferta > demanda ENTONCES
+							ESCRIBIR 'oferta>demanda'
+							fun_obj <- oferta_obj + (vogel.iloc[indice_pen_col][indice_val_min] * demanda)
+							vogel_sol[indice_pen_col_sol][indice_val_min] <- demanda
+							vogel[indice_val_min][-2:-1].values[0] <- 0
+							vogel[indice_pen_col,-2] <- vogel.iloc[indice_pen_col,-2] - demanda
+							vogel[indice_pen_col, -1] <- 0
+							vogel.drop(indice_val_min)
+							SI oferta = demanda
+								vogel.drop(indice_pen_col)
+						SI NO 
+							ESCRIBIR 'demanda < ofeta'
+							fun_obj <- fun_obj + (vogel.iloc[indice_pen_col][indice_val_min] * oferta)
+                        				vogel_sol[indice_pen_col_sol][indice_val_min] <- oferta
+							vogel[indice_pen_col,-2] <- 0
+							vogel[indice_val_min][-2:-1].values[0] <- vogel[indice_val_min][-2:-1].values[0] - oferta
+							vogel[indice_pen_col,-1] <- 0
+							vogel.drop(indice_pen_col_sol)
+							
+
