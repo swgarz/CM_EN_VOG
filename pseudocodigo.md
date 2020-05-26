@@ -39,102 +39,240 @@
 		    costo_min[renglon, -1] <- costo_min[renglon, -1] - demanda 
 		    
 		    costo_min.drop(columna_0)
-<!-- hasta aqui llevamos -->
-	       SiNo
-		    fun_obj += demanda por el costo minimo
-		    costo minimo solucion <- oferta
-		    renglon <- 0
-		    demanda <- demanda - oferta
-		    se elimina el renglon
-	       Si el vector minimos [0] == 0 Entonces
+	        SI NO ENTONCES
+		    fun_obj <- func_obj + (costo_min[costo_min.index[renglon], columna] * oferta)
+		    costo_min_sol[costo_min[renglon], columna] <- oferta
+		    costo_min[renglon, -1] <- 0
+		    costo_min[costo_index[-1], columna] <- costo_min[costo_min[-1], columna]
+		    costo_min.drop(renglon_0) 
+		SI minimos.shape[0] = 0
 		    bandera <- False
-		    Romper ciclo
-	       SiNo
-		    Si demanda == 0 Entonces
-			  eliminar tabla columnas
-		    SiNo 
-			  elimiar tabla filas
-	     Escribir costo minimo solucion
+		    break
+		    ESCRIBIR "Proceso terminado"
+		FINSI
+		FINSI
+	     SI NO ENTONCES
+	     	SI demanda = 0
+			costo_min.drop(columna_0)
+		SI NO
+			costo_min.drop(renglon_0)
+		    
+	     ESCRIBIR '**************************'
+	     ESCRIBIR 'Funcion Objetivo', fun_obj
+	     ESCRIBIR costo_min_sol
      
-     Leer datos
-     indice en fuentes
-     n_col <- costo minimo solucion
-     n_ren <- costo minimo
+     costo_min <- LEER(vogel.csv)
+     costo_min <- LEER(vogel.csv)
+     n_col <- costo_min_sol.shape[1] - 1
+     n_ren <- costo_min.shape[0] - 1
      optimiza_met <- true
      primera_ite <- 0
-     Escribir "Solucion inicial"
-     Mientras optimiza_met
-      Si primera_ite == 0
-            matriz <- matriz costo minimo solucion
-            matriz <- matriz dato float
-            matriz [matriz == 0] <- not a number
-            matriz_no_bas <- copia matriz
-            matriz_circuito <- copia matriz
-      SiNo
-            matriz <- copia matriz_circuito
-            matriz_no_bas <- copia matriz
-            matriz_circuito <- copia matriz
-      primera_ite += 1
-      
-      ls_u <- [np.nan Para i=1 incremento 1 hasta n_ren]
-      ls_v <- [np.nan para i=1 incremento 1 hasta n_col]
+     ESCRIBIR 'Solucion inicial'
+     MIENTRAS optimiza_met HACER
+      SI primera_ite = 0
+            matriz <- costo_min_sol[:-1, :-1].to_numpy()
+            matriz <- matriz.astype('float')
+            matriz [matriz = 0] <- 'nan'
+            matriz_no_bas <- matriz
+            matriz_circuito <- matriz
+	    matriz_costo <- costo_min[:-1, :-1].to_numpy()
+      SI NO
+            matriz <- matriz_circuito
+            matriz_no_bas <- matriz
+            matriz_circuito <- matriz
+      primera_ite <- + 1
+      PARA i HASTA n_ren HACER
+      	ls_u <- i
+      FINPARA
+      PARA i HASTA n_col HACER 
+      	ls_v <- i
+      FINPARA
       ren <- 1
       col <- 1
       bandera <- 0
       ls_u [0] <- 0
       ls_basicas <- []
-      Para ren=1 incremento 1 hasta n_ren
-            Para col=1 incremento 1 hasta n_col
-                  SiNo valor nulo en matriz 
-                        valor append a ls_basicas
-                        SiNo valor nulo en ls_u y valor nulo en ls_v
-                              ls_v <- matriz_costo - ls_u
-                        Si valor nulo ls_u y no valor nulo ls_v
-                              ls_u <- matriz_costo - ls_v
-      Para ren=1 incremento 1 hasta tamaño de ls_u
-            Si valor nulo en ls_u
-            Para col=1 incremento 1 hasta n_col
-                  SiNo malor nulo en matriz 
-                        ls_v <- matriz_costo - ls_u
-      Para col=1 incremento 1 hasta tamaño de ls_v
-            Si valor nulo en ls_v
-            Para ren=1 incremento 1 hasta n_ren
-                  SiNo valor nulo en matriz 
-                        ls_v <- matriz_costo - ls_u 
+      PARA ren=1 INCREMENTO 1 HASTA n_ren
+            PARA col=1 INCREMENTO 1 HASTA n_col
+                  SI not math.isnan(matriz[ren][col]) ENTONCES
+                        ls_basicas.append((ren, col))
+                        Si not SI not math.isnan(ls_u[ren]) AND math.isnan(ls_v[col]) ENTONCES 
+                              ls_v[col] <- matriz_costo[ren][col] - ls_u[ren]
+                        SINO SI math.isnan(ls_u[ren]) AND NOT math.isnan(ls_v[col]) ENTONCES
+                              ls_u[ren] <- matriz_costo[ren][col] - ls_v[col]
+		        FINSI
+		   FINSI
+	      FINPARA
+     FINPARA
+        PARA ren <- 0 HASTA len(ls_u) HACER
+            SI math.isnan(ls_u[ren]) ENTONCES
+                PARA col <- 0 HASTA n_col HACER
+                    SI not math.isnan(matriz[ren][col]) ENTONCES
+                        ls_v[col] <- matriz_costo[ren][col] - ls_u[ren]   
+		    FINSI
+		FINPARA
+	     FINSI               
+        FINPARA
+	PARA col <- 0 HASTA len(ls_v) HACER
+            SI math.isnan(ls_v[col]) ENTONCES
+                PARA ren <- 0 HASTA n_ren HACER
+                    SI not math.isnan(matriz[ren][col]) ENTONCES
+                        ls_v[col] <- matriz_costo[ren][col] - ls_u[ren]      
+		    FINSI                    
+                FINPARA
+	    FINSI
+	 FINPARA
+ 
       r_entrada <- 0
       c_entrada <- 0
       entrada <- -1000
       demanda <- []
       oferta <- []
-      Para ren=1 incremento 1 hasta n_ren
-            Para col=1 incremento 1 hasta n_col
-                  Si valor nulo en matriz_no_bas Entonces
-                        matriz_no_bas <- ls_u + ls_v - matriz_costo
-                        Si matriz_no_bas > entrada Entonces
-                              entrada <- matriz_no_bas
-                              r_entrada <- ren
-                              c_entrada <- col
-                        SiNo 
-                              matriz_no_bas <- 0
-      Si entrada < 0 Entonces
-            optimiza_met <- false
-            Romper ciclo
-                        
+      PARA ren <- 0 HASTA n_ren HACER
+            PARA col <- 0 HASTA n_col HACER
+                SI math.isnan(matriz_no_bas[ren][col]) ENTONCES
+                   matriz_no_bas[ren][col] <- ls_u[ren] + ls_v[col] - matriz_costo[ren][col]
+                   SI matriz_no_bas[ren][col] > entrada ENTONCES
+                       entrada <- matriz_no_bas[ren][col]
+                       r_entrada <- ren
+                       c_entrada <- col   
+                   FINSI
+                SI NO ENTONCES
+                    matriz_no_bas[ren][col] <- 0
+                FINSI
+	    FINPARA
+	FINPARA
+	SI entrada < 0 ENTONCES
+            optimiza_met <- False
+            break 
+        FINSI
+	
       circuito <- false
       ban_cir <- 0
       ls_circuito <- []
       r_e <- r_entrada
       c_e <- c_entrada
       ls_aux <- ls_basicas
-      valor append a ls_basicas
-      ls_basicas_clone <- copia ls_basicas
-      n<-4
-   ###### concepto prueba
-      matriz_circuito2 <- copia matriz
+      ls_basicas.append((r_entrada, c_entrada))
+      ls_basicas_clone <- ls_basicas
+      
+   <!-- Concepto de prueba -->
+   
+      n <- 4
+      matriz_circuito2 <- matriz
       matriz_circuito2 [r_entrada][c_entrada] <- 1
-      ban_cir_t <- false
-      Para c=1 n=4 incremento 4 hasta el tamaño de ls_basicas + 1
-   ###### pendiente
+      ban_cir_t <- False
+      
+      PARA c <- 0, n <- 4 HASTA enumerate(len(ls_basicas)+1) HACER
+        comb <- itertools.combinations([c PARA c <- 0, i <- 0 HASTA enumerate(ls_basicas) FINPARA], n )                                         
+        PARA com <- 0 HASTA comb HACER
+		SI len(list(com)) % 2 = 0 
+			criterio <- len(list(com))
+		SI NO ENTONCES 
+			criterio <- len(list(com)) - 1 
+		FINSI
+                                      
+            SI len(ls_basicas)-1 in list(com) ENTONCES
+                ord_circuito, costo_cir <- encuentra_circuito2(list(com), ls_basicas)
+                num_extremos <- 0
+                PARA i HASTA ord_circuito HACER
+                    SI isextremo(matriz_circuito2, ls_basicas[i][0], ls_basicas[i][1]) ENTONCES
+                       num_extremos = num_extremos + 1 
+                    FINSI
+                FINPARA
+                SI costo_cir = criterio AND num_extremos>=4 ENTONCES
+                    camino <- list(com)
+                    ban_cir_t <- True
+                    break
+				FINSI
+			FINSI
+        FINPARA
+        SI ban_cir_t ENTONCES
+            break
+        FINSI
+    FINPARA
+	
+    ini <- ord_circuito.index(len(ls_basicas)-1)
+    camino <- ord_circuito[ini:] + ord_circuito[0:ini]
+    l_theta <- []
+    l_theta_p <- []
+    
+    signos <- 1
+    ban_alt <- False
+    PARA c <- 0, i <- 0 HASTA enumerate(camino) HACER
+        ren <- ls_basicas[i][0]
+        col <- ls_basicas[i][1]
+        SI c = 0 ENTONCES
+            matriz_circuito[ren][col] <- 100000
+        SI NO ENTONCES
+            SI signos % 2 != 0 ENTONCES
+                SI isextremo(matriz_circuito2, ren, col):
+                    SI matriz_circuito[ren][col] = 0 ENTONCES
+                        ban_alt <- True
+                    FINSI
+                    l_theta.append(matriz_circuito[ren][col])
+                    signos = signos + 1
+                FINSI
+            SI NO ENTONCES
+                SI isextremo(matriz_circuito2, ren, col):
+                    l_theta_p.append(matriz_circuito[ren][col])
+                    signos = signos + 1
+				FINSI
+			FINSI
+        FINSI
+    FINPARA
+    theta <- min(l_theta)
+
+    matriz_circuito2 <- matriz
+    matriz_circuito2[r_entrada][c_entrada] <- theta
+    signos <- 1
+    PARA c <- 0, i <- 0 HASTA enumerate(camino) HACER
+        ren <- ls_basicas[i][0]
+        col <- ls_basicas[i][1]
+        SI c = 0 ENTONCES
+            matriz_circuito[ren][col] <- theta
+        SI NO ENTONCES
+            SI signos % 2 != 0 ENTONCES
+                SI isextremo(matriz_circuito2, ren, col) ENTONCES
+                    matriz_circuito[ren][col] <- matriz_circuito[ren][col] -  theta                                                 
+                    signos <- signos + 1
+                FINSI
+            SI NO ENTONCES
+                SI isextremo(matriz_circuito2, ren, col) ENTONCES                                                
+                    matriz_circuito[ren][col] <- matriz_circuito[ren][col] + theta
+                    signos <- + signos 1
+				FINSI
+			FINSI
+		FINSI
+    FINPARA
+    ban_for <- False
+        
+    PARA ren <- 0 HASTA n_ren HACER
+        PARA col <- 0 n_col HACER
+            SI matriz_circuito[ren][col] = 0 ENTONCES
+                matriz_circuito[ren][col] <- 'nan'
+                ban_for <- True                        
+                break
+            FINSI
+        FINPARA
+        SI ban_for ENTONCES
+               FINPARA
+            break
+        FINSI
+	FINPARA
+	ENDWHILE
+
+	fun_obj2 <- 0
+	PARA ren <- 0 HASTA n_ren HACER
+	    PARA col <- 0 HASTA n_col HACER
+		SI not math.isnan(matriz[ren][col]) ENTONCES
+		    fun_obj2 <- fun_obj2 + (matriz[ren][col] * matriz_costo[ren][col])
+		FINSI
+		FINPARA
+	FINPARA
+	ESCRIBIR 'Funcion Objetivo:: ', fun_obj2
+	ESCRIBIR matriz         
+
    
               
   
