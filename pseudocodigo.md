@@ -852,8 +852,149 @@
 							vogel[indice_pen_col,-1] <- 0
 							vogel.drop(indice_pen_col_sol)
 							
-
-
+					SI NO ENTONCES
+					    	SI demanda = 0 ENTONCES
+							vogel.drop(indice_val_min)
+						SI NO ENTONCES
+							vogel.drop(indice_pen_col_sol)
+				    SI NO ENTONCES
+				    	ESCRIBIR 'Buscara por columna', indice_pen_ren
+					indice_val_min <- vogel[indice_pen_ren]
+					oferta <- vogel[indice_val_min,:][-2]
+					demanda <- vogel[indice_pen_ren][-2:-1].values[0]
+					SI demanda != 0 AND oferta != 0 ENTONCES
+						SI oferta > demanda ENTONCES
+							ESCRIBIR 'oferta > demanda'
+							fun_obj <- func_obj +  (vogel[indice_pen_ren][indice_val_min] * demanda)
+                        vogel_sol[indice_pen_ren][indice_val_min] <- demanda
+                        vogel[indice_pen_ren][-2:-1].values[0] <- 0
+                        vogel[indice_val_min,-2] <- vogel[list(vogel.index).index(indice_val_min),-2] - demanda
+                        vogel[indice_pen_ren].iloc[-1] <- 0
+                        vogel.drop(indice_pen_ren)
+					         SI NO ENTONCES
+						 	ESCRIBIR 'demanda < oferta'
+							fun_obj <- func_obj + (vogel[indice_pen_ren][indice_val_min] * oferta)
+                        vogel_sol[indice_pen_ren][indice_val_min] <- oferta
+                        vogel[indice_val_min,-2] <- 0
+                        vogel[indice_pen_ren][-2:-1].values[0] <- vogel[indice_pen_ren][-2:-1].values[0] - oferta
+                        vogel[indice_pen_ren] <- 0
+                        vogel.drop(indice_val_min)
+					SI NO ENTONCES
+						SI demanda = 0 ENTONCES
+							vogel.drop(indice_pen_ren)
+						SI NO ENTONCES
+							vogel.drop(indice_val_min)
+	ESCRIBIR '*********************'
+	ESCRIBIR 'Funcion objetivo: ', fun_obj
+	ESCRIBIR vogel_sol
+	
+	vogel <- LEER (vogel.csv)
+	vogel <- LEER (vogel.csv)
+	
+	vogel_sol <- vogel[:-1]
+	vogel_col <- vogel_sol[:,:-1]
+	
+	n_col <- vogel_sol.shape[1] - 1
+	n_ren <- vogel_sol.shape[0] - 1
+	optimiza_met <- True
+	primera_ite <- 0
+	ESCRIBIR 'Solucion inicial'
+	MIENTRAS optimiza_met HACER
+		SI primera_ite = 0 ENTONCES
+		    matriz <- vogel_sol[:-1,:-1].to_numpy()
+		    matriz <- matriz.astype('float')
+		    matriz[matriz = 0] <- 'nan' 
+		    matriz_no_bas <- matriz
+		    matriz_circuito <- matriz
+		    matriz_costo <- vogel[:-1,:-1].to_numpy()
+		SI NO ENTONCES
+		    matriz <- matriz_circuito
+		    matriz_no_bas <- matriz
+		    matriz_circuito <- matriz
+		primera_ite <- primera_ite + 1
+		
+		PARA i HASTA n_ren HACER
+		ls_u <- i
+		FINPARA
+	
+		PARA i HASTA n_col HACER
+		ls_v <- i
+		FINPARA
+		
+		ren <- 1
+		col <- 1
+		bandera <- 0 
+		ls_u[0] <- 0
+		ls_basicas <- []
+		 PARA ren <- 0 HASTA n_ren HACER
+        		PARA col <- 0 HASTA n_col HACER
+            			SI not math.isnan(matriz[ren][col]) ENTONCES
+                			ls_basicas.append((ren, col))
+                			SI not math.isnan(ls_u[ren]) AND math.isnan(ls_v[col]) ENTONCES
+                    				ls_v[col] <- matriz_costo[ren][col] - ls_u[ren]                    
+                			SINO SI math.isnan(ls_u[ren]) AND not math.isnan(ls_v[col]) ENTONCES
+                   		 		ls_u[ren] <- matriz_costo[ren][col] - ls_v[col]
+					FINSI
+				FINSI
+        		FINPARA
+    		FINPARA
+		
+		PARA ren <- 0 HASTA len(ls_u) HACER
+        		SI math.isnan(ls_u[ren]) ENTONCES
+            			PARA col <- 0 HASTA n_col HACER
+                			SI not math.isnan(matriz[ren][col]) ENTONCES
+                    				ls_v[col] <- matriz_costo[ren][col] - ls_u[ren]   
+					FINSI
+				FINPARA
+			FINSI               
+    		FINPARA
+		
+		PARA col <- 0 HASTA len(ls_v) HACER
+        		SI math.isnan(ls_v[col]) ENTONCES
+            			PARA ren <- 0 HASTA n_ren HACER
+                			SI not math.isnan(matriz[ren][col]) ENTONCES
+                    				ls_v[col] <- matriz_costo[ren][col] - ls_u[ren]      
+					FINSI                    
+            			FINPARA
+			FINSI
+		FINPARA
+		
+		r_entrada <- 0
+		c_entrada <- 0 
+		entrada <- -1000
+		demanda <- []
+		oferta <- []
+		PARA ren <- 0 HASTA n_ren HACER
+        		PARA col <- 0 HASTA n_col HACER
+            			SI math.isnan(matriz_no_bas[ren][col]) ENTONCES
+               				matriz_no_bas[ren][col] <- ls_u[ren] + ls_v[col] - matriz_costo[ren][col]
+               				SI matriz_no_bas[ren][col] > entrada ENTONCES
+					   entrada <- matriz_no_bas[ren][col]
+					   r_entrada <- ren
+					   c_entrada <- col   
+               				FINSI
+            			SI NO ENTONCES
+                			matriz_no_bas[ren][col] <- 0
+            			FINSI
+			FINPARA
+		FINPARA
+	    	SI entrada < 0 ENTONCES
+        		optimiza_met <- False
+        		break
+    		FINSI
+		
+		circuito <- False
+		ban_cir <- 0
+		ls_circuito <- []
+		
+		r_e <- r_entrada
+		c_e <- c_entrada
+		
+		ls_aux <- ls_basicas
+		ls_basicas.append((r_entrada, c_entrada))
+		ls_basicas_clone <- ls_basicas
+						
+						
 <!-- concepto prueba -->
 
 	matriz_circuito2 <- matriz
