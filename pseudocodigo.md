@@ -525,8 +525,8 @@
                         ls_v[col] <- matriz_costo[ren][col] - ls_u[ren]                    
                     SINO SI math.isnan(ls_u[ren]) AND not math.isnan(ls_v[col]) ENTONCES
                         ls_u[ren] <- matriz_costo[ren][col] - ls_v[col]
-					FINSI
-				FINSI
+		    FINSI
+		FINSI
             FINPARA
         FINPARA
 
@@ -535,9 +535,9 @@
                 PARA col <- 0 HASTA n_col HACER
                     SI not math.isnan(matriz[ren][col]) ENTONCES
                         ls_v[col] <- matriz_costo[ren][col] - ls_u[ren]   
-					FINSI
-				FINPARA
-			FINSI               
+		    FINSI
+		FINPARA
+	    FINSI               
         FINPARA
 		
         PARA col <- 0 HASTA len(ls_v) HACER
@@ -545,9 +545,10 @@
                 PARA ren <- 0 HASTA n_ren HACER
                     SI not math.isnan(matriz[ren][col]) ENTONCES
                         ls_v[col] <- matriz_costo[ren][col] - ls_u[ren]      
-					FINSI                    
+		   FINSI                    
                 FINPARA
-			FINSI
+	    FINSI
+	FINPARA
 
         r_entrada <- 0
         c_entrada <- 0
